@@ -1,50 +1,81 @@
-# Welcome to your Expo app 👋
+# Floating Menu Component Documentation
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Overview
 
-## Get started
+The floating menu is an interactive UI component that displays a main button (+) which, when pressed, reveals a set of animated options. This menu uses fluid animations with React Native Reanimated and haptic feedback for an enhanced user experience.
 
-1. Install dependencies
+## Components
 
-   ```bash
-   npm install
-   ```
+The floating menu system consists of two main components:
 
-2. Start the app
+1. **PlusMenu**: The main component that contains the + button and handles opening/closing animations
+2. **OptionButton**: The individual option buttons that appear when the menu is activated
 
-   ```bash
-    npx expo start
-   ```
+## Dependencies Installation
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Make sure you have the following dependencies installed:
 
 ```bash
-npm run reset-project
+npm install react-native-reanimated expo-blur expo-haptics @expo/vector-icons
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Usage
 
-## Learn more
+### Integrating PlusMenu
 
-To learn more about developing your project with Expo, look at the following resources:
+Import and place the PlusMenu component in your application:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```jsx
+import PlusMenu from '@/components/PlusMenu';
 
-## Join the community
+export default function MyScreen() {
+  return (
+    <View style={{ flex: 1 }}>
+      {/* Your screen content */}
+      <PlusMenu />
+    </View>
+  );
+}
+```
 
-Join our community of developers creating universal apps.
+### Customizing Options
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+The PlusMenu component uses OptionButton to display different actions. You can customize these actions by modifying the PlusMenu.tsx file:
+
+```jsx
+<OptionButton
+  iconName="camera-outline"
+  title="Pictures"
+  description="Take a picture"
+  translateY={offsets[0]}
+  opacity={opacities[0]}
+/>
+```
+
+## Features
+
+- **Fluid Animations**: Uses React Native Reanimated for performant animations
+- **Haptic Feedback**: Provides tactile feedback via expo-haptics when opening/closing the menu
+- **Blur Effect**: Uses expo-blur to create a background blur effect (with fallback for Android)
+- **Sequential Animation**: Buttons appear with a sequential delay for an attractive visual effect
+
+## OptionButton API
+
+| Prop | Type | Description |
+|------|------|-------------|
+| iconName | string | Icon name from the Ionicons library |
+| title | string | Button title |
+| description | string | Action description |
+| translateY | SharedValue\<number\> | Animation value for vertical position |
+| opacity | SharedValue\<number\> | Animation value for opacity |
+
+## Advanced Haptic Feedback Usage
+
+The menu uses the `hapticWithSequence` function which allows creating haptic feedback sequences:
+
+```js
+// Usage examples:
+hapticWithSequence(["O"]); // Heavy impact
+hapticWithSequence(["o"]); // Medium impact
+hapticWithSequence([".", 100, "o", 100, "O"]); // Complex sequence
+```
