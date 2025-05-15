@@ -12,13 +12,14 @@ import Reanimated, {
 } from "react-native-reanimated";
 import { hapticWithSequence } from "@/utils/haptics";
 import OptionButton from "@/components/OptionButton";
-
+import { useColorScheme } from "@/hooks/useColorScheme";
 const STATUSBAR_HEIGHT = Constants.statusBarHeight;
 
 const PlusButtonReanimated = Reanimated.createAnimatedComponent(View);
 const PlusBarReanimated = Reanimated.createAnimatedComponent(View);
 
 const PlusMenu: React.FC = () => {
+  const colorScheme = useColorScheme();
   /* --------------------------------------------------
    * State
    * ------------------------------------------------*/
@@ -187,7 +188,7 @@ const PlusMenu: React.FC = () => {
               <View
                 style={[
                   StyleSheet.absoluteFill,
-                  { backgroundColor: "rgba(0,0,0,0.5)" },
+                  { backgroundColor: "rgba(0,0,0,0.1)" },
                 ]}
               />
             )}
@@ -201,7 +202,7 @@ const PlusMenu: React.FC = () => {
           <BlurView
             style={StyleSheet.absoluteFill}
             intensity={30}
-            tint="light"
+            tint={colorScheme === "dark" ? "dark" : "light"}
           />
         ) : (
           <View

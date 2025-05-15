@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "floating-menu",
-    "slug": "floating-menu",
+    "name": "Expo Playground",
+    "slug": "expo-playground",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
