@@ -36,7 +36,7 @@ const PLAYGROUND_ITEMS: PlaygroundItem[] = [
     title: "Reminders Notifications",
     icon: "notifications-outline",
     route: "ReminidersNotifications",
-    description: "Time-based reminder selection component",
+    description: "Time-based reminder selection",
     color: ["#6a11cb", "#2575fc"],
   },
   {
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   header: {
-    paddingTop: 10,
+    paddingTop: 24,
     fontSize: 38,
     fontWeight: "800",
     letterSpacing: -0.5,
