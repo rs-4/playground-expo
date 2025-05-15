@@ -28,7 +28,7 @@ export const Colors = {
 };
 
 export const darkGradient = {
-  top: '#4E2DA6',     
+  top: '#4E2DA6',
   middle: '#35205B',
   lower: '#1E1033',
   bottom: '#111111',

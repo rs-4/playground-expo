@@ -7,7 +7,6 @@ This playground is a section of the application dedicated to demonstrating and t
 > **Note:** All components are fully compatible with Expo SDK 53.0 and later versions ✅
 > Support typescript ✅
 
-
 ## Available Components ✨
 
 Currently, the playground contains the following components:
@@ -42,19 +41,19 @@ To add a new component to the playground, follow these steps:
 ```tsx
 const PLAYGROUND_ITEMS: PlaygroundItem[] = [
   {
-    title: "Plus Menu",
-    icon: "add-circle-outline",
-    route: "PlusMenu",
-    description: "Floating menu with animated options",
-    color: ["#4facfe", "#00f2fe"],
+    title: 'Plus Menu',
+    icon: 'add-circle-outline',
+    route: 'PlusMenu',
+    description: 'Floating menu with animated options',
+    color: ['#4facfe', '#00f2fe'],
   },
   {
-    title: "New Component",
-    icon: "cube-outline", 
-    route: "NewComponent",
-    description: "Description of the new component",
-    color: ["#fa709a", "#fee140"],
-  }
+    title: 'New Component',
+    icon: 'cube-outline',
+    route: 'NewComponent',
+    description: 'Description of the new component',
+    color: ['#fa709a', '#fee140'],
+  },
 ];
 ```
 

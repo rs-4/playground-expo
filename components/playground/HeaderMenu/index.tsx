@@ -1,21 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Animated,
-  Easing,
-  Platform,
-  Dimensions,
-  Text,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ThemedText } from "@/components/ThemedText";
-import { darkGradient } from "@/constants/Colors";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import { useRouter } from "expo-router";
+import React, { useState, useRef, useEffect } from 'react';
+import { View, TouchableOpacity, Animated, Easing, Platform, Dimensions, Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ThemedText } from '@/components/ThemedText';
+import { darkGradient } from '@/constants/Colors';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { useRouter } from 'expo-router';
 
 export interface MenuItem {
   icon: string;
@@ -33,8 +24,8 @@ interface FloatingMenuProps {
 }
 
 const FloatingMenu = ({
-  greeting = "Hello",
-  userName = "John",
+  greeting = 'Hello',
+  userName = 'John',
   menuItems,
   extraTopPadding = 0,
   onMenuToggle,
@@ -80,12 +71,12 @@ const FloatingMenu = ({
   const headerBgScale = useRef(new Animated.Value(1)).current;
 
   const insets = useSafeAreaInsets();
-  const isDark = useThemeColor({}, "background") === "#151718";
+  const isDark = useThemeColor({}, 'background') === '#151718';
   const router = useRouter();
 
   const rotateInterpolation = iconRotate.interpolate({
     inputRange: [0, 1],
-    outputRange: ["0deg", "90deg"],
+    outputRange: ['0deg', '90deg'],
   });
 
   const blurInterpolation = menuBlurAnimation.interpolate({
@@ -320,103 +311,67 @@ const FloatingMenu = ({
     <>
       {/* Navigation menu */}
       <View
-        style={[
-          styles.header,
-          {
-            paddingTop:
-              insets.top + extraTopPadding || (Platform.OS === "ios" ? 60 : 40),
-            zIndex: 10,
-          },
-        ]}
-      >
+        className="z-10 flex-col overflow-hidden rounded-b-[24px] shadow-md shadow-black/10"
+        style={{
+          paddingTop: insets.top + extraTopPadding || (Platform.OS === 'ios' ? 60 : 40),
+        }}>
         <Animated.View
+          className="absolute inset-0"
           style={{
-            ...StyleSheet.absoluteFillObject,
             transform: [{ scale: headerBgScale }],
             opacity: headerBgOpacity,
-          }}
-        >
+          }}>
           <LinearGradient
-            colors={[
-              darkGradient.top,
-              darkGradient.middle,
-              darkGradient.bottom,
-            ]}
+            colors={[darkGradient.top, darkGradient.middle, darkGradient.bottom]}
             locations={[0, 0.6, 1]}
-            style={[
-              StyleSheet.absoluteFill,
-              {
-                borderBottomLeftRadius: menuOpen ? 0 : 24,
-                borderBottomRightRadius: menuOpen ? 0 : 24,
-              },
-            ]}
+            className="absolute inset-0"
+            style={{
+              borderBottomLeftRadius: menuOpen ? 0 : 24,
+              borderBottomRightRadius: menuOpen ? 0 : 24,
+            }}
           />
         </Animated.View>
 
-        <View style={styles.headerContent}>
+        <View className="flex-row items-center justify-between px-6 py-4">
           <Animated.View
-            style={[
-              styles.headerLeft,
-              {
-                transform: [
-                  { scale: greetingScale },
-                  { translateY: greetingTranslateY },
-                ],
-              },
-            ]}
-          >
-            <ThemedText type="defaultSemiBold" style={styles.greeting}>
-              {greeting}{" "}
-              <ThemedText style={styles.nameText}>{userName}</ThemedText> 👋
+            className="flex-row items-center"
+            style={{
+              transform: [{ scale: greetingScale }, { translateY: greetingTranslateY }],
+            }}>
+            <ThemedText type="defaultSemiBold" className="text-lg tracking-wider text-white">
+              {greeting}{' '}
+              <ThemedText className="font-normal italic text-white">{userName}</ThemedText> 👋
             </ThemedText>
           </Animated.View>
-          <TouchableOpacity
-            onPress={toggleMenu}
-            style={styles.userIconButton}
-            activeOpacity={0.8}
-          >
+          <TouchableOpacity onPress={toggleMenu} className="relative p-1" activeOpacity={0.8}>
             <View
-              style={[
-                styles.userIconContainer,
-                { backgroundColor: "rgba(255,255,255,0.15)" },
-              ]}
-            >
+              className="h-9 w-9 items-center justify-center rounded-full shadow-sm shadow-black/10"
+              style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
               <Animated.View
+                className="absolute"
                 style={{
-                  transform: [
-                    { scale: iconScale },
-                    { rotate: rotateInterpolation },
-                  ],
-                  position: "absolute",
-                }}
-              >
+                  transform: [{ scale: iconScale }, { rotate: rotateInterpolation }],
+                }}>
                 <Ionicons name="person" size={18} color="#fff" />
               </Animated.View>
               <Animated.View
+                className="absolute"
                 style={{
                   opacity: crossOpacity,
-                  position: "absolute",
-                }}
-              >
+                }}>
                 <Ionicons name="close" size={18} color="#fff" />
               </Animated.View>
             </View>
           </TouchableOpacity>
         </View>
 
-        <Animated.View style={[styles.menuContainer, { height: headerHeight }]}>
+        <Animated.View className="overflow-hidden" style={{ height: headerHeight }}>
           <Animated.View
-            style={[
-              styles.menuContent,
-              {
-                opacity: menuItemsOpacity,
-                filter:
-                  Platform.OS === "web"
-                    ? `blur(${blurInterpolation}px)`
-                    : undefined,
-              },
-            ]}
-          >
+            className="px-6 pb-4 pt-2"
+            style={{
+              opacity: menuItemsOpacity,
+              filter: Platform.OS === 'web' ? `blur(${blurInterpolation}px)` : undefined,
+            }}>
             {menuItems.map((item, index) => (
               <Animated.View
                 key={index}
@@ -437,18 +392,14 @@ const FloatingMenu = ({
                       }),
                     },
                   ],
-                }}
-              >
+                }}>
                 <TouchableOpacity
-                  style={[
-                    styles.menuItem,
-                    {
-                      transform: [{ perspective: 1000 }],
-                    },
-                  ]}
+                  className="mb-0.5 flex-row items-center px-2.5 py-3.5"
+                  style={{
+                    transform: [{ perspective: 1000 }],
+                  }}
                   onPress={() => handleItemPress(item, index)}
-                  activeOpacity={0.7}
-                >
+                  activeOpacity={0.7}>
                   <Animated.View
                     style={{
                       transform: [
@@ -463,13 +414,12 @@ const FloatingMenu = ({
                           }),
                         },
                       ],
-                    }}
-                  >
+                    }}>
                     <Ionicons
                       name={item.icon as any}
                       size={20}
-                      color={item.isLogout ? "#FF3B30" : "#fff"}
-                      style={styles.menuItemIcon}
+                      color={item.isLogout ? '#FF3B30' : '#fff'}
+                      className="mr-5 w-6 text-center"
                     />
                   </Animated.View>
 
@@ -484,14 +434,11 @@ const FloatingMenu = ({
                           }),
                         },
                       ],
-                    }}
-                  >
+                    }}>
                     <ThemedText
-                      style={[
-                        styles.menuItemText,
-                        item.isLogout ? styles.logoutText : null,
-                      ]}
-                    >
+                      className={`text-[17px] font-medium italic tracking-wider ${
+                        item.isLogout ? 'font-semibold text-[#FF3B30]' : 'text-white'
+                      }`}>
                       {item.label}
                     </ThemedText>
                   </Animated.View>
@@ -504,88 +451,5 @@ const FloatingMenu = ({
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: "column",
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
-    zIndex: 10,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-  },
-  headerContent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 24,
-    paddingVertical: 16,
-  },
-  headerLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  greeting: {
-    fontSize: 18,
-    color: "#fff",
-    letterSpacing: 0.2,
-  },
-  nameText: {
-    fontStyle: "italic",
-    fontWeight: "normal",
-    color: "#fff",
-  },
-  userIconButton: {
-    position: "relative",
-    padding: 4,
-  },
-  userIconContainer: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  menuContainer: {
-    overflow: "hidden",
-  },
-  menuContent: {
-    paddingHorizontal: 24,
-    paddingTop: 8,
-    paddingBottom: 16,
-  },
-  menuItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 14,
-    paddingHorizontal: 10,
-    marginBottom: 2,
-  },
-  menuItemIcon: {
-    marginRight: 20,
-    width: 24,
-    textAlign: "center",
-  },
-  menuItemText: {
-    fontSize: 17,
-    color: "#fff",
-    fontWeight: "500",
-    fontStyle: "italic",
-    letterSpacing: 0.3,
-  },
-  logoutText: {
-    color: "#FF3B30",
-    fontWeight: "600",
-  },
-});
 
 export default FloatingMenu;

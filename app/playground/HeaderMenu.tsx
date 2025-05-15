@@ -1,23 +1,15 @@
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  Animated,
-  Easing,
-} from "react-native";
-import HeaderMenu from "@/components/playground/HeaderMenu";
-import { ThemedView } from "@/components/ThemedView";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import { Ionicons } from "@expo/vector-icons";
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { menuItems } from "@/constants/MenuItem";
+import React, { useState } from 'react';
+import { StyleSheet, SafeAreaView, TouchableOpacity, Animated, Easing } from 'react-native';
+import HeaderMenu from '@/components/playground/HeaderMenu';
+import { ThemedView } from '@/components/ThemedView';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { Ionicons } from '@expo/vector-icons';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { menuItems } from '@/constants/MenuItem';
 
 export default function HeaderMenuScreen() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [contentBlurOpacity, setContentBlurOpacity] = useState(
-    new Animated.Value(0)
-  );
+  const [contentBlurOpacity, setContentBlurOpacity] = useState(new Animated.Value(0));
   const [contentScale, setContentScale] = useState(new Animated.Value(1));
 
   const handleMenuToggle = (open: boolean) => {

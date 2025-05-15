@@ -1,18 +1,18 @@
-import React from "react";
-import { View, StyleSheet, Pressable } from "react-native";
-import { router } from "expo-router";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { useThemeColor } from "@/hooks/useThemeColor";
+import React from 'react';
+import { View, StyleSheet, Pressable } from 'react-native';
+import { router } from 'expo-router';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 const HomePage = () => {
-  const cardColor = useThemeColor({}, "card");
+  const cardColor = useThemeColor({}, 'card');
 
   return (
     <ThemedView style={styles.container}>
       <ThemedText style={styles.header}>Bienvenue</ThemedText>
 
-      <Pressable onPress={() => router.push("../playground")}>
+      <Pressable onPress={() => router.push('../playground')}>
         <View style={[styles.card, { backgroundColor: cardColor }]}>
           <ThemedText style={styles.cardTitle}>Playground</ThemedText>
           <ThemedText style={styles.cardDescription}>
@@ -33,14 +33,14 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 28,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 24,
   },
   card: {
     padding: 20,
     borderRadius: 12,
     marginBottom: 16,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 8,
   },
   cardDescription: {

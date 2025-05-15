@@ -61,13 +61,13 @@ The PlusMenu component uses OptionButton to display different actions. You can c
 
 ## OptionButton API
 
-| Prop | Type | Description |
-|------|------|-------------|
-| iconName | string | Icon name from the Ionicons library |
-| title | string | Button title |
-| description | string | Action description |
-| translateY | SharedValue\<number\> | Animation value for vertical position |
-| opacity | SharedValue\<number\> | Animation value for opacity |
+| Prop        | Type                  | Description                           |
+| ----------- | --------------------- | ------------------------------------- |
+| iconName    | string                | Icon name from the Ionicons library   |
+| title       | string                | Button title                          |
+| description | string                | Action description                    |
+| translateY  | SharedValue\<number\> | Animation value for vertical position |
+| opacity     | SharedValue\<number\> | Animation value for opacity           |
 
 ## Advanced Haptic Feedback Usage
 
@@ -75,7 +75,7 @@ The menu uses the `hapticWithSequence` function which allows creating haptic fee
 
 ```js
 // Usage examples:
-hapticWithSequence(["O"]); // Heavy impact
-hapticWithSequence(["o"]); // Medium impact
-hapticWithSequence([".", 100, "o", 100, "O"]); // Complex sequence
+hapticWithSequence(['O']); // Heavy impact
+hapticWithSequence(['o']); // Medium impact
+hapticWithSequence(['.', 100, 'o', 100, 'O']); // Complex sequence
 ```

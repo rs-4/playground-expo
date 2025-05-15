@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Pressable, Platform } from "react-native";
-import Constants from "expo-constants";
-import { BlurView } from "expo-blur";
+import React, { useState, useEffect } from 'react';
+import { View, Pressable, Platform } from 'react-native';
+import Constants from 'expo-constants';
+import { BlurView } from 'expo-blur';
 import Reanimated, {
   useSharedValue,
   withTiming,
@@ -9,10 +9,10 @@ import Reanimated, {
   useAnimatedStyle,
   interpolateColor,
   Easing,
-} from "react-native-reanimated";
-import { hapticWithSequence } from "@/utils/haptics";
-import OptionButton from "@/components/OptionButton";
-import { useColorScheme } from "@/hooks/useColorScheme";
+} from 'react-native-reanimated';
+import { hapticWithSequence } from '@/utils/haptics';
+import OptionButton from '@/components/OptionButton';
+import { useColorScheme } from '@/hooks/useColorScheme';
 const STATUSBAR_HEIGHT = Constants.statusBarHeight;
 
 const PlusButtonReanimated = Reanimated.createAnimatedComponent(View);
@@ -42,29 +42,17 @@ const PlusMenu: React.FC = () => {
    * Animated styles
    * ------------------------------------------------*/
   const plusStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(
-      plusBg.value,
-      [0, 1],
-      ["#ffffff", "#000000"]
-    ),
+    backgroundColor: interpolateColor(plusBg.value, [0, 1], ['#ffffff', '#000000']),
   }));
 
   const hBarStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${plusRotation.value}deg` }],
-    backgroundColor: interpolateColor(
-      plusBarColor.value,
-      [0, 1],
-      ["#000000", "#ffffff"]
-    ),
+    backgroundColor: interpolateColor(plusBarColor.value, [0, 1], ['#000000', '#ffffff']),
   }));
 
   const vBarStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: "90deg" }, { rotate: `${plusRotation.value}deg` }],
-    backgroundColor: interpolateColor(
-      plusBarColor.value,
-      [0, 1],
-      ["#000000", "#ffffff"]
-    ),
+    transform: [{ rotate: '90deg' }, { rotate: `${plusRotation.value}deg` }],
+    backgroundColor: interpolateColor(plusBarColor.value, [0, 1], ['#000000', '#ffffff']),
   }));
 
   /* --------------------------------------------------
@@ -86,7 +74,7 @@ const PlusMenu: React.FC = () => {
     resetButtonStates();
 
     // Haptic ► heavy
-    hapticWithSequence(["O"]);
+    hapticWithSequence(['O']);
 
     // Plus button morph
     plusRotation.value = withTiming(45, {
@@ -109,13 +97,16 @@ const PlusMenu: React.FC = () => {
     // Wave‑like rise of buttons (bottom → top)
     const baseDelay = 80;
     offsets.forEach((offset, idx) => {
-      setTimeout(() => {
-        opacities[idx].value = 1;
-        offset.value = withSpring(-80 * (idx + 1), {
-          damping: 15,
-          stiffness: 180,
-        });
-      }, baseDelay * (idx + 1));
+      setTimeout(
+        () => {
+          opacities[idx].value = 1;
+          offset.value = withSpring(-80 * (idx + 1), {
+            damping: 15,
+            stiffness: 180,
+          });
+        },
+        baseDelay * (idx + 1)
+      );
     });
   };
 
@@ -123,7 +114,7 @@ const PlusMenu: React.FC = () => {
     setIsClosing(true);
 
     // Haptic ► medium
-    hapticWithSequence(["o"]);
+    hapticWithSequence(['o']);
 
     // Reverse the plus morph
     plusRotation.value = withTiming(0, {
@@ -171,56 +162,49 @@ const PlusMenu: React.FC = () => {
    * Render
    * ------------------------------------------------*/
   return (
-    <View style={styles.container} pointerEvents="box-none">
+    <View className="pointer-events-none flex-1">
       {(showOptions || isClosing) && (
-        <Reanimated.View
-          style={[styles.blurOverlay, blurStyle]}
-          pointerEvents="auto"
-        >
-          <Pressable style={StyleSheet.absoluteFill} onPress={toggle}>
-            {Platform.OS === "ios" ? (
-              <BlurView
-                style={StyleSheet.absoluteFill}
-                intensity={blurAmount}
-                tint="dark"
-              />
+        <Reanimated.View className="pointer-events-auto absolute inset-0 z-10" style={blurStyle}>
+          <Pressable className="absolute inset-0" onPress={toggle}>
+            {Platform.OS === 'ios' ? (
+              <BlurView className="absolute inset-0" intensity={blurAmount} tint="dark" />
             ) : (
-              <View
-                style={[
-                  StyleSheet.absoluteFill,
-                  { backgroundColor: "rgba(0,0,0,0.1)" },
-                ]}
-              />
+              <View className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.1)' }} />
             )}
           </Pressable>
         </Reanimated.View>
       )}
 
       {/* Fixed top blur */}
-      <View style={styles.topBlur} pointerEvents="none">
-        {Platform.OS === "ios" ? (
+      <View
+        className="pointer-events-none absolute left-0 right-0 top-0"
+        style={{ height: STATUSBAR_HEIGHT }}>
+        {Platform.OS === 'ios' ? (
           <BlurView
-            style={StyleSheet.absoluteFill}
+            className="absolute inset-0"
             intensity={30}
-            tint={colorScheme === "dark" ? "dark" : "light"}
+            tint={colorScheme === 'dark' ? 'dark' : 'light'}
           />
         ) : (
-          <View
-            style={[
-              StyleSheet.absoluteFill,
-              { backgroundColor: "rgba(255,255,255,0.8)" },
-            ]}
-          />
+          <View className="absolute inset-0" style={{ backgroundColor: 'rgba(255,255,255,0.8)' }} />
         )}
       </View>
 
       {/* Floating action button & options */}
-      <View style={styles.bottomBar} pointerEvents="box-none">
+      <View className="pointer-events-box-none absolute bottom-24 right-6 items-center">
         {/* Main + button */}
-        <PlusButtonReanimated style={[styles.plusBtn, plusStyle]}>
-          <Pressable style={StyleSheet.absoluteFill} onPress={toggle}>
-            <PlusBarReanimated style={[styles.plusBar, hBarStyle]} />
-            <PlusBarReanimated style={[styles.plusBar, vBarStyle]} />
+        <PlusButtonReanimated
+          className="h-14 w-14 items-center justify-center rounded-full shadow-lg shadow-black/25"
+          style={plusStyle}>
+          <Pressable className="absolute inset-0 flex items-center justify-center" onPress={toggle}>
+            <PlusBarReanimated
+              className="absolute h-[2.5px] w-[18px] rounded-full"
+              style={hBarStyle}
+            />
+            <PlusBarReanimated
+              className="absolute h-[2.5px] w-[18px] rounded-full"
+              style={vBarStyle}
+            />
           </Pressable>
         </PlusButtonReanimated>
 
@@ -249,9 +233,9 @@ const PlusMenu: React.FC = () => {
               opacity={opacities[2]}
             />
             <OptionButton
-              iconName="create-outline"
+              iconName="document-text-outline"
               title="Text"
-              description="Write your meal manually"
+              description="Quick notes"
               translateY={offsets[3]}
               opacity={opacities[3]}
             />
@@ -263,54 +247,3 @@ const PlusMenu: React.FC = () => {
 };
 
 export default PlusMenu;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  blurOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 20,
-  },
-  topBlur: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    height: STATUSBAR_HEIGHT + 80,
-    zIndex: 15,
-    overflow: "hidden",
-  },
-  bottomBar: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 40,
-    alignItems: "flex-end",
-    paddingRight: 20,
-    zIndex: 25,
-  },
-  plusBtn: {
-    width: 60,
-    height: 60,
-    borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
-    marginBottom: 8,
-  },
-  plusBar: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    width: 18,
-    height: 2,
-    borderRadius: 1,
-    marginLeft: -9, // centers horizontally
-    marginTop: -1, // centers vertically
-  },
-});
