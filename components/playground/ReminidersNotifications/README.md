@@ -1,53 +1,106 @@
-# ReminidersNotifications
+# Reminders Notifications Component
 
-## Description
+![Demo](demo.gif)
 
-ReminidersNotifications is a time-based reminder selection component. It allows users to choose when they want to receive notifications for reminders, with an animated and intuitive user interface.
+## Overview
+
+The Reminders Notifications component provides a modern, animated interface for users to configure daily time-based reminders. It features a grid of time slots with predefined options (Morning, Noon, Afternoon, Evening) and allows users to add custom reminder times.
 
 ## Features
 
-- **Time Selection**: Choice of reminders with different predefined durations
-- **Fluid Animations**: Smooth transitions between different component states
-- **Intuitive Interface**: Clear organization of time options
-- **Visual Feedback**: Animations when selecting options
-- **Adaptability**: Adjusts to the light/dark theme of the application
+- ✨ **Animated UI**: Built with React Native Reanimated for smooth transitions and effects
+- 🔔 **Time Slot Selection**: Predefined time slots with intuitive selection
+- ⏰ **Custom Times**: Ability to add personalized reminder times
+- 📱 **Platform Adaptation**: Different Time Picker handling for iOS and Android 
+- 🌈 **Beautiful Gradient Buttons**: Modern gradient buttons with animated feedback
+
+
+
+## Installation
+
+Make sure you have the following dependencies installed:
+
+```bash
+npm install react-native-reanimated @react-native-community/datetimepicker expo-linear-gradient @expo/vector-icons
+```
 
 ## Usage
 
-```tsx
-import ReminidersNotifications from "@/components/playground/ReminidersNotifications";
+### Basic Integration
 
-export default function MyScreen() {
-  const handleTimeSelection = (timeOption) => {
-    // Process the selected time option
-    console.log("Selected time:", timeOption);
-  };
+Import and use the ReminidersNotifications component in your screen:
 
-  return (
-    <View style={{ flex: 1 }}>
-      <ReminidersNotifications onSelectTime={handleTimeSelection} />
-    </View>
-  );
-}
+```jsx
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import ReminidersNotifications from "@/components/ReminidersNotifications";
+
+const RemindersScreen = () => (
+  <View style={styles.container}>
+    <ReminidersNotifications />
+  </View>
+);
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f7",
+  },
+});
+
+export default RemindersScreen;
 ```
 
-## Technologies Used
+### Route Configuration
 
-- **React Native Reanimated**: For performant animations
-- **Expo Vector Icons**: For interface icons
-- **Gesture Handler**: For fluid touch interactions
+To add this screen to your Expo Router application:
 
-## Structure
+1. Create the component file at `components/ReminidersNotifications.tsx`
+2. Set up the route in your `app/(tabs)/index.tsx` file
+3. Configure your tab layout in `app/(tabs)/_layout.tsx` 
 
-The component is organized into different sections:
-- A list of time options (15 min, 30 min, 1 hour, etc.)
-- Visual effects to indicate active selection
-- A confirmation animation when making a selection
+## Component Structure
 
-## Customization
+The component consists of:
 
-The component can be customized by adjusting:
-- Available time options
-- Button colors and styles
-- Animations and their durations
-- Option texts and descriptions 
+- **ReminidersNotifications**: Main component that manages time slots and user interactions
+- **DarkGradientButton**: Reusable gradient button component with press animation
+
+## Props & Customization
+
+The component accepts the following props:
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| initialTimeSlots | TimeSlot[] | [Morning, Noon, Afternoon, Evening] | Predefined time slots |
+| onTimesSelected | Function | undefined | Callback when user confirms selections |
+| theme | Object | Light theme | Customization options for colors |
+
+## Technical Details
+
+### Time Slot Management
+
+The component maintains selected time slots in state:
+
+```javascript
+const [selectedHours, setSelectedHours] = useState<string[]>([]);
+```
+
+Time slots can be toggled by tapping, with visual feedback to indicate selection.
+
+### Custom Time Selection
+
+The component uses a platform-specific approach for time selection:
+- On iOS: Custom modal with DateTimePicker in spinner mode
+- On Android: Native DateTimePicker dialog
+
+### Animations
+
+The UI includes several animated elements:
+- FadeInDown: Title and cards fade in from top
+- SlideInRight: Time slots slide in from right with sequential delay
+- Layout animations: Smooth transitions when items are added or removed
+
+## License
+
+MIT © [rs-4]

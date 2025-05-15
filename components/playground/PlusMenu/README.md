@@ -1,49 +1,81 @@
-# PlusMenu
+# Floating Menu Component Documentation
 
-## Description
+## Overview
 
-PlusMenu is a floating menu component with fluid animations and haptic feedback. It displays a floating "+" button that, when clicked, transforms into an "×" and reveals multiple action options in a smooth animation.
+The floating menu is an interactive UI component that displays a main button (+) which, when pressed, reveals a set of animated options. This menu uses fluid animations with React Native Reanimated and haptic feedback for an enhanced user experience.
 
-## Features
+## Components
 
-- **Transformation Animation**: The "+" button transforms into an "×" when opening the menu
-- **Options Animation**: Options appear with a ripple effect from bottom to top
-- **Blur Effect**: Use of a background blur effect to highlight the menu
-- **Haptic Feedback**: Tactile feedback when opening and closing the menu
-- **Cross-platform Support**: Works on iOS and Android with platform-specific adaptations
+The floating menu system consists of two main components:
+
+1. **PlusMenu**: The main component that contains the + button and handles opening/closing animations
+2. **OptionButton**: The individual option buttons that appear when the menu is activated
+
+## Dependencies Installation
+
+Make sure you have the following dependencies installed:
+
+```bash
+npm install react-native-reanimated expo-blur expo-haptics @expo/vector-icons
+```
 
 ## Usage
 
-```tsx
-import PlusMenu from "@/components/playground/PlusMenu";
+### Integrating PlusMenu
+
+Import and place the PlusMenu component in your application:
+
+```jsx
+import PlusMenu from '@/components/PlusMenu';
 
 export default function MyScreen() {
   return (
     <View style={{ flex: 1 }}>
-      {/* Your content */}
+      {/* Your screen content */}
       <PlusMenu />
     </View>
   );
 }
 ```
 
-## Technologies Used
+### Customizing Options
 
-- **React Native Reanimated**: For smooth and performant animations
-- **Expo Blur**: For the background blur effect
-- **Haptics**: For tactile feedback
+The PlusMenu component uses OptionButton to display different actions. You can customize these actions by modifying the PlusMenu.tsx file:
 
-## Structure
+```jsx
+<OptionButton
+  iconName="camera-outline"
+  title="Pictures"
+  description="Take a picture"
+  translateY={offsets[0]}
+  opacity={opacities[0]}
+/>
+```
 
-The component is built with different animated parts:
-- A main button with two bars (horizontal and vertical) that form the "+" symbol
-- Option buttons that appear with animation
-- A blur overlay that appears in the background
+## Features
 
-## Customization
+- **Fluid Animations**: Uses React Native Reanimated for performant animations
+- **Haptic Feedback**: Provides tactile feedback via expo-haptics when opening/closing the menu
+- **Blur Effect**: Uses expo-blur to create a background blur effect (with fallback for Android)
+- **Sequential Animation**: Buttons appear with a sequential delay for an attractive visual effect
 
-The component can be customized by modifying the following properties:
-- Button colors and gradients
-- Option icons and text
-- Haptic feedback intensity
-- Animation timing and curves 
+## OptionButton API
+
+| Prop | Type | Description |
+|------|------|-------------|
+| iconName | string | Icon name from the Ionicons library |
+| title | string | Button title |
+| description | string | Action description |
+| translateY | SharedValue\<number\> | Animation value for vertical position |
+| opacity | SharedValue\<number\> | Animation value for opacity |
+
+## Advanced Haptic Feedback Usage
+
+The menu uses the `hapticWithSequence` function which allows creating haptic feedback sequences:
+
+```js
+// Usage examples:
+hapticWithSequence(["O"]); // Heavy impact
+hapticWithSequence(["o"]); // Medium impact
+hapticWithSequence([".", 100, "o", 100, "O"]); // Complex sequence
+```

@@ -5,6 +5,8 @@
 This playground is a section of the application dedicated to demonstrating and testing custom React Native components. It serves as an interactive showcase for components that can be reused in other projects.
 
 > **Note:** All components are fully compatible with Expo SDK 53.0 and later versions ✅
+> Support typescript ✅
+
 
 ## Available Components ✨
 
