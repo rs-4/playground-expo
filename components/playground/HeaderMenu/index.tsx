@@ -57,25 +57,25 @@ const FloatingMenu = ({
       .map(() => new Animated.Value(0))
   ).current;
 
-  // Animation pour l'effet de parallaxe 3D - corrigé pour TypeScript
+  // Animation for the 3D parallax effect - fixed for TypeScript
   const menuItemDepth = useRef(
     Array(menuItems.length)
       .fill(0)
       .map(() => new Animated.Value(20))
   ).current;
 
-  // Animation des icônes avec effet ressort
+  // Animation for icons with spring effect
   const menuItemIconScale = useRef(
     Array(menuItems.length)
       .fill(0)
       .map(() => new Animated.Value(0))
   ).current;
 
-  // Animation pour le titre du header
+  // Animation for the header title
   const greetingScale = useRef(new Animated.Value(1)).current;
   const greetingTranslateY = useRef(new Animated.Value(0)).current;
 
-  // Animation pour le fond du header
+  // Animation for the header background
   const headerBgOpacity = useRef(new Animated.Value(1)).current;
   const headerBgScale = useRef(new Animated.Value(1)).current;
 
@@ -97,13 +97,13 @@ const FloatingMenu = ({
     const newMenuState = !menuOpen;
     setMenuOpen(newMenuState);
 
-    // Informer le parent du changement d'état du menu
+    // Inform the parent of the menu state change
     if (onMenuToggle) {
       onMenuToggle(newMenuState);
     }
 
     if (newMenuState) {
-      // Ouverture du menu avec animations séquentielles
+      // Opening the menu with sequential animations
       Animated.parallel([
         Animated.timing(headerHeight, {
           toValue: Math.min(240, 70 + menuItems.length * 50),
@@ -131,7 +131,7 @@ const FloatingMenu = ({
           duration: 400,
           useNativeDriver: false,
         }),
-        // Animation de l'opacité globale du contenu
+        // Animation of the global content opacity
         Animated.timing(menuItemsOpacity, {
           toValue: 1,
           duration: 300,
@@ -139,7 +139,7 @@ const FloatingMenu = ({
           useNativeDriver: true,
         }),
 
-        // Animation du titre du header
+        // Animation of the header title
         Animated.timing(greetingScale, {
           toValue: 0.95,
           duration: 400,
@@ -153,7 +153,7 @@ const FloatingMenu = ({
           useNativeDriver: true,
         }),
 
-        // Animation du fond du header
+        // Animation of the header background
         Animated.timing(headerBgOpacity, {
           toValue: 0.9,
           duration: 350,
@@ -168,7 +168,7 @@ const FloatingMenu = ({
         }),
       ]).start();
 
-      // Animation séquentielle des éléments du menu avec effet 3D
+      // Sequential animation of menu items with 3D effect
       menuItemAnimations.forEach((anim, index) => {
         Animated.timing(anim, {
           toValue: 1,
@@ -178,7 +178,7 @@ const FloatingMenu = ({
           useNativeDriver: true,
         }).start();
 
-        // Animation pour l'effet de parallaxe
+        // Animation for the parallax effect
         Animated.timing(menuItemDepth[index], {
           toValue: 0,
           duration: 600,
@@ -187,28 +187,28 @@ const FloatingMenu = ({
           useNativeDriver: true,
         }).start();
 
-        // Animation de l'icône avec effet ressort plus doux
+        // Softer spring animation for the icon
         Animated.spring(menuItemIconScale[index], {
-          toValue: 1.15, // Valeur maximale plus faible (1.3 → 1.15)
-          friction: 8, // Friction plus élevée pour moins de rebonds (3 → 8)
-          tension: 30, // Tension plus faible pour un effet plus doux (50 → 30)
+          toValue: 1.15, // Lower maximum value (1.3 → 1.15)
+          friction: 8, // Higher friction for fewer bounces (3 → 8)
+          tension: 30, // Lower tension for a softer effect (50 → 30)
           useNativeDriver: true,
           delay: 150 + index * 60,
         }).start();
       });
 
-      // Animation des textes
+      // Animation of texts
       menuTextAnimations.forEach((anim, index) => {
         Animated.timing(anim, {
           toValue: 1,
           duration: 400,
-          delay: 250 + index * 60, // Délai pour les textes
+          delay: 250 + index * 60, // Delay for texts
           easing: Easing.bezier(0.25, 1, 0.5, 1),
           useNativeDriver: true,
         }).start();
       });
     } else {
-      // Fermeture du menu
+      // Closing the menu
       Animated.parallel([
         Animated.timing(headerHeight, {
           toValue: 0,
@@ -242,7 +242,7 @@ const FloatingMenu = ({
           useNativeDriver: true,
         }),
 
-        // Animation du titre du header
+        // Animation of the header title
         Animated.timing(greetingScale, {
           toValue: 1,
           duration: 350,
@@ -256,7 +256,7 @@ const FloatingMenu = ({
           useNativeDriver: true,
         }),
 
-        // Animation du fond du header
+        // Animation of the header background
         Animated.timing(headerBgOpacity, {
           toValue: 1,
           duration: 300,
@@ -271,7 +271,7 @@ const FloatingMenu = ({
         }),
       ]).start();
 
-      // Réinitialisation des animations des éléments du menu
+      // Reset animations of menu items
       menuItemAnimations.forEach((anim, index) => {
         Animated.timing(anim, {
           toValue: 0,
@@ -279,7 +279,7 @@ const FloatingMenu = ({
           useNativeDriver: true,
         }).start();
 
-        // Animation pour l'effet de parallaxe
+        // Animation for the parallax effect
         Animated.timing(menuItemDepth[index], {
           toValue: 20,
           duration: 250,
@@ -287,7 +287,7 @@ const FloatingMenu = ({
           useNativeDriver: true,
         }).start();
 
-        // Réinitialisation des animations des icônes - fermeture plus douce
+        // Reset icon animations - smoother closing
         Animated.timing(menuItemIconScale[index], {
           toValue: 0,
           duration: 200,
@@ -296,7 +296,7 @@ const FloatingMenu = ({
         }).start();
       });
 
-      // Réinitialisation des animations des textes
+      // Reset text animations
       menuTextAnimations.forEach((anim) => {
         Animated.timing(anim, {
           toValue: 0,
@@ -312,13 +312,13 @@ const FloatingMenu = ({
       item.onPress();
     }
 
-    // Fermer le menu après avoir cliqué sur un élément
+    // Close the menu after clicking on an item
     toggleMenu();
   };
 
   return (
     <>
-      {/* Menu de navigation */}
+      {/* Navigation menu */}
       <View
         style={[
           styles.header,
@@ -429,7 +429,7 @@ const FloatingMenu = ({
                         outputRange: [15, 0],
                       }),
                     },
-                    // Utilise translateX avec des valeurs plus grandes pour simuler un effet 3D
+                    // Uses translateX with larger values to simulate a 3D effect
                     {
                       translateX: menuItemDepth[index].interpolate({
                         inputRange: [0, 20],
@@ -456,7 +456,7 @@ const FloatingMenu = ({
                           scale: menuItemIconScale[index],
                         },
                         {
-                          // Léger effet de glissement horizontal des icônes
+                          // Slight horizontal sliding effect for icons
                           translateX: menuItemAnimations[index].interpolate({
                             inputRange: [0, 1],
                             outputRange: [-15, 0],

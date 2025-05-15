@@ -33,7 +33,7 @@ const ReminidersNotifications = () => {
     { time: "20:00", label: "Evening", description: "Dinner" },
   ];
 
-  // Sélectionner le premier rappel par défaut au chargement
+  // Select the first reminder by default at loading
   useEffect(() => {
     if (timeSlots.length > 0 && selectedHours.length === 0) {
       toggleHour(timeSlots[0].time);
@@ -57,12 +57,12 @@ const ReminidersNotifications = () => {
       const minutes = date.getMinutes().toString().padStart(2, "0");
       const time = `${hours}:${minutes}`;
 
-      // Ajouter le temps personnalisé à la liste
+      // Add the custom time to the list
       if (!customTimes.includes(time)) {
         setCustomTimes([...customTimes, time]);
       }
 
-      // Activer le rappel (sélectionner automatiquement)
+      // Activate the reminder (automatically select it)
       if (!selectedHours.includes(time)) {
         toggleHour(time);
       }
@@ -218,7 +218,7 @@ const ReminidersNotifications = () => {
           <DarkGradientButton title="Save reminders" onPress={handleValidate} />
         </Animated.View>
 
-        {/* Time Picker Modal pour iOS */}
+        {/* Time Picker Modal for iOS */}
         {Platform.OS === "ios" ? (
           <Modal
             visible={showTimePicker}

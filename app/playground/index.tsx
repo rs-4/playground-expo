@@ -83,7 +83,7 @@ export default function PlaygroundIndex() {
           scrollEventThrottle={16}
         >
           {PLAYGROUND_ITEMS.map((item, index) => {
-            // Animation basée sur un offset standard pour éviter les références circulaires
+            // Animation based on a standard offset to avoid circular references
             const itemOffset = 100 * index;
             const nextItemOffset = 100 * (index + 2);
 
