@@ -29,9 +29,9 @@ npm install react-native-reanimated @react-native-community/datetimepicker expo-
 Import and use the ReminidersNotifications component in your screen:
 
 ```jsx
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import ReminidersNotifications from '@/components/ReminidersNotifications';
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import ReminidersNotifications from "@/components/ReminidersNotifications";
 
 const RemindersScreen = () => (
   <View style={styles.container}>
@@ -42,7 +42,7 @@ const RemindersScreen = () => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f7',
+    backgroundColor: "#f5f5f7",
   },
 });
 

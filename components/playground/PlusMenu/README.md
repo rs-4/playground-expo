@@ -26,7 +26,11 @@ npm install react-native-reanimated expo-blur expo-haptics @expo/vector-icons
 Import and place the PlusMenu component in your application:
 
 ```jsx
+<<<<<<< HEAD
 import PlusMenu from '@/components/PlusMenu';
+=======
+import PlusMenu from "@/components/PlusMenu";
+>>>>>>> 4fcbca8 (chore: remove config tailwind doesn't support SDK53)
 
 export default function MyScreen() {
   return (
@@ -75,7 +79,7 @@ The menu uses the `hapticWithSequence` function which allows creating haptic fee
 
 ```js
 // Usage examples:
-hapticWithSequence(['O']); // Heavy impact
-hapticWithSequence(['o']); // Medium impact
-hapticWithSequence(['.', 100, 'o', 100, 'O']); // Complex sequence
+hapticWithSequence(["O"]); // Heavy impact
+hapticWithSequence(["o"]); // Medium impact
+hapticWithSequence([".", 100, "o", 100, "O"]); // Complex sequence
 ```

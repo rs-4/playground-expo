@@ -17,13 +17,13 @@ HeaderMenu is an elegant animated header with a dropdown user menu. It features 
 ## Usage
 
 ```tsx
-import HeaderMenu from '@/components/playground/HeaderMenu';
-import { menuItems } from '@/constants/MenuItem';
+import HeaderMenu from "@/components/playground/HeaderMenu";
+import { menuItems } from "@/constants/MenuItem";
 
 export default function MyScreen() {
   const handleMenuToggle = (isOpen: boolean) => {
     // Apply additional effects to your page content when menu opens/closes
-    console.log('Menu is now:', isOpen ? 'open' : 'closed');
+    console.log("Menu is now:", isOpen ? "open" : "closed");
   };
 
   return (
