@@ -79,7 +79,7 @@ The menu uses the `hapticWithSequence` function which allows creating haptic fee
 
 ```js
 // Usage examples:
-hapticWithSequence(["O"]); // Heavy impact
-hapticWithSequence(["o"]); // Medium impact
-hapticWithSequence([".", 100, "o", 100, "O"]); // Complex sequence
+hapticWithSequence(['O']); // Heavy impact
+hapticWithSequence(['o']); // Medium impact
+hapticWithSequence(['.', 100, 'o', 100, 'O']); // Complex sequence
 ```

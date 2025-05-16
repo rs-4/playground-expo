@@ -59,7 +59,7 @@ export default function PlaygroundIndex() {
       <ThemedView style={styles.container}>
         <View style={styles.headerContainer}>
           <ThemedText style={styles.header}>Playground</ThemedText>
-          <ThemedText style={styles.subheader}>Composants interactifs</ThemedText>
+          <ThemedText style={styles.subheader}>Interactive components</ThemedText>
         </View>
 
         <Animated.ScrollView
