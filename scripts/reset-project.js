@@ -90,8 +90,8 @@ const moveDirectories = async (userInput) => {
       `1. Run \`npx expo start\` to start a development server.\n2. Edit app/index.tsx to edit the main screen.${
         userInput === 'y'
           ? `\n3. Delete the /${exampleDir} directory when you're done referencing it.`
-          : ''
-      }`
+          : ""
+      }`,
     );
   } catch (error) {
     console.error(`❌ Error during script execution: ${error.message}`);
@@ -108,5 +108,5 @@ rl.question(
       console.log("❌ Invalid input. Please enter 'Y' or 'N'.");
       rl.close();
     }
-  }
+  },
 );

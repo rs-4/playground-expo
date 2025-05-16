@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -102,53 +103,52 @@ const ReminidersNotifications = () => {
   }, [allTimeSlots.length]);
 
   return (
-    <SafeAreaView className="android:pt-[30px] flex-1 bg-[#f5f5f7] pt-[50px]">
-      <View className="android:pb-[100px] w-full flex-1 p-4 pb-[120px] pt-5">
+    <SafeAreaView style={styles.container}>
+      <View style={styles.contentContainer}>
         <Animated.View entering={FadeInDown.duration(400)}>
-          <Text className="mb-6 mt-3 w-full text-2xl font-bold text-[#1c1c1e]">
-            Notifications 🔔
-          </Text>
+          <Text style={styles.title}>Notifications 🔔</Text>
         </Animated.View>
 
         <Animated.View
           entering={FadeInDown.delay(100).duration(400)}
           layout={Layout.springify()}
-          className="mb-4 overflow-hidden rounded-2xl bg-white shadow-sm shadow-black/5">
-          <View className="flex-row items-center border-b border-[#f2f2f7] p-4">
-            <View className="mr-3 h-8 w-8 items-center justify-center rounded-lg bg-[#007aff]">
+          style={styles.notificationCard}>
+          <View style={styles.notificationHeader}>
+            <View style={styles.notificationIcon}>
               <MaterialCommunityIcons name="bell" size={20} color="white" />
             </View>
-            <Text className="text-[17px] font-semibold text-[#1c1c1e]">Daily reminders</Text>
+            <Text style={styles.notificationTitle}>Daily reminders</Text>
           </View>
 
-          <View className="h-[400px]">
+          <View style={styles.timeGrid}>
             <ScrollView
               ref={scrollViewRef}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ flexGrow: 1 }}>
-              <View className="flex-row flex-wrap gap-3 p-3 pb-6">
+              <View style={styles.timeGridContent}>
                 {allTimeSlots.map((slot, index) => (
-                  <View key={slot.time} className="mb-3 h-[100px] w-[48%]">
+                  <View key={slot.time} style={styles.timeSlotWrapper}>
                     <Animated.View
                       entering={SlideInRight.delay(index * 10).springify()}
                       layout={Layout.springify()}>
                       <TouchableOpacity
-                        className={`h-full ${
-                          selectedHours.includes(slot.time)
-                            ? 'bg-[#007AFF] shadow-md shadow-black/20'
-                            : 'bg-[#f2f2f7]'
-                        } items-center justify-center rounded-2xl p-4`}
+                        style={[
+                          styles.timeSlot,
+                          selectedHours.includes(slot.time) && styles.timeSlotSelected,
+                        ]}
                         onPress={() => toggleHour(slot.time)}>
                         <Text
-                          className={`${
-                            selectedHours.includes(slot.time) ? 'text-white' : 'text-[#1c1c1e]'
-                          } text-base font-semibold`}>
+                          style={[
+                            styles.timeSlotText,
+                            selectedHours.includes(slot.time) && styles.timeSlotTextSelected,
+                          ]}>
                           {slot.time}
                         </Text>
                         <Text
-                          className={`${
-                            selectedHours.includes(slot.time) ? 'text-white/80' : 'text-[#8e8e93]'
-                          } mt-1 text-center text-xs`}>
+                          style={[
+                            styles.timeSlotSubtext,
+                            selectedHours.includes(slot.time) && styles.timeSlotSubtextSelected,
+                          ]}>
                           {slot.label} - {slot.description}
                         </Text>
                       </TouchableOpacity>
@@ -156,16 +156,16 @@ const ReminidersNotifications = () => {
                   </View>
                 ))}
 
-                <View className="mb-3 h-[100px] w-[48%]">
+                <View style={styles.timeSlotWrapper}>
                   <Animated.View
                     entering={SlideInRight.delay(allTimeSlots.length * 50).springify()}
                     layout={Layout.springify()}>
                     <TouchableOpacity
-                      className="h-full items-center justify-center rounded-2xl border-2 border-dashed border-[#007AFF] bg-[#f2f2f7] p-4"
+                      style={[styles.timeSlot, styles.timeSlotCustom]}
                       onPress={handleAddCustomTime}>
                       <MaterialCommunityIcons name="plus" size={24} color="#007AFF" />
-                      <Text className="text-base font-semibold text-[#007AFF]">Custom</Text>
-                      <Text className="mt-1 text-center text-xs text-[#007AFF]">Add a time</Text>
+                      <Text style={styles.timeSlotTextCustom}>Custom</Text>
+                      <Text style={styles.timeSlotSubtextCustom}>Add a time</Text>
                     </TouchableOpacity>
                   </Animated.View>
                 </View>
@@ -177,11 +177,11 @@ const ReminidersNotifications = () => {
         <Animated.View
           entering={FadeInDown.delay(200).duration(400)}
           layout={Layout.springify()}
-          className="mb-4 flex-row items-center rounded-2xl bg-white p-4">
-          <View className="mr-3 h-8 w-8 items-center justify-center rounded-lg bg-[#34c759]">
+          style={styles.infoCard}>
+          <View style={styles.infoIcon}>
             <MaterialCommunityIcons name="information" size={20} color="white" />
           </View>
-          <Text className="flex-1 text-[15px] text-[#1c1c1e]">
+          <Text style={styles.infoText}>
             Activate notifications so you don't forget to log your meals
           </Text>
         </Animated.View>
@@ -194,26 +194,24 @@ const ReminidersNotifications = () => {
         {Platform.OS === 'ios' ? (
           <Modal visible={showTimePicker} transparent={true} animationType="slide">
             <TouchableOpacity
-              className="flex-1"
+              style={{ flex: 1 }}
               activeOpacity={1}
               onPress={() => setShowTimePicker(false)}>
-              <View className="absolute bottom-0 left-0 right-0 items-center rounded-t-xl bg-[#f2f2f7] p-4">
-                <View className="mb-4 w-full flex-row items-center justify-between p-2">
+              <View style={styles.timePickerContainer}>
+                <View style={styles.timePickerHeader}>
                   <TouchableOpacity
-                    className="min-w-[60px] items-center p-2"
+                    style={styles.timePickerButton}
                     onPress={() => setShowTimePicker(false)}>
-                    <Text className="text-[17px] font-semibold text-[#8e8e93]">Cancel</Text>
+                    <Text style={styles.timePickerButtonText}>Cancel</Text>
                   </TouchableOpacity>
-                  <Text className="flex-1 text-center text-[17px] font-semibold text-[#1c1c1e]">
-                    Choose a time
-                  </Text>
-                  <TouchableOpacity
-                    className="min-w-[60px] items-center p-2"
-                    onPress={handleConfirmTime}>
-                    <Text className="text-[17px] font-semibold text-[#007AFF]">OK</Text>
+                  <Text style={styles.timePickerTitle}>Choose a time</Text>
+                  <TouchableOpacity style={styles.timePickerButton} onPress={handleConfirmTime}>
+                    <Text style={[styles.timePickerButtonText, styles.timePickerButtonTextPrimary]}>
+                      OK
+                    </Text>
                   </TouchableOpacity>
                 </View>
-                <View className="w-full items-center p-4">
+                <View style={styles.timePickerContent}>
                   <DateTimePicker
                     value={selectedDate}
                     mode="time"
@@ -243,5 +241,190 @@ const ReminidersNotifications = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f7',
+    paddingTop: Platform.OS === 'ios' ? 50 : 30,
+  },
+  contentContainer: {
+    padding: 16,
+    paddingTop: 20,
+    paddingBottom: Platform.OS === 'ios' ? 120 : 100,
+    flex: 1,
+    width: '100%',
+  },
+  title: {
+    width: '100%',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 24,
+    marginTop: 12,
+    color: '#1c1c1e',
+  },
+  notificationCard: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    marginBottom: 16,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  notificationHeader: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f2f2f7',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  notificationIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: '#007aff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  notificationTitle: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#1c1c1e',
+  },
+  timeGrid: {
+    height: 400,
+  },
+  timeGridContent: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 12,
+    gap: 12,
+    paddingBottom: 24,
+  },
+  timeSlotWrapper: {
+    width: '48%',
+    height: 100,
+    marginBottom: 12,
+  },
+  timeSlot: {
+    height: '100%',
+    backgroundColor: '#f2f2f7',
+    borderRadius: 16,
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  timeSlotSelected: {
+    backgroundColor: '#007AFF',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 6,
+  },
+  timeSlotCustom: {
+    backgroundColor: '#f2f2f7',
+    borderWidth: 2,
+    borderStyle: 'dashed',
+    borderColor: '#007AFF',
+  },
+  timeSlotText: {
+    color: '#1c1c1e',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  timeSlotTextSelected: {
+    color: 'white',
+  },
+  timeSlotTextCustom: {
+    color: '#007AFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  timeSlotSubtext: {
+    color: '#8e8e93',
+    fontSize: 13,
+    marginTop: 4,
+    textAlign: 'center',
+  },
+  timeSlotSubtextSelected: {
+    color: 'rgba(255,255,255,0.8)',
+  },
+  timeSlotSubtextCustom: {
+    color: '#007AFF',
+    fontSize: 13,
+    marginTop: 4,
+    textAlign: 'center',
+  },
+  infoCard: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  infoIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: '#34c759',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  infoText: {
+    fontSize: 15,
+    color: '#1c1c1e',
+    flex: 1,
+  },
+  timePickerContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#f2f2f7',
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+  },
+  timePickerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    width: '100%',
+    padding: 8,
+  },
+  timePickerTitle: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#1c1c1e',
+    flex: 1,
+    textAlign: 'center',
+  },
+  timePickerButton: {
+    padding: 8,
+    minWidth: 60,
+    alignItems: 'center',
+  },
+  timePickerButtonText: {
+    color: '#8e8e93',
+    fontSize: 17,
+    fontWeight: '600',
+  },
+  timePickerButtonTextPrimary: {
+    color: '#007AFF',
+  },
+  timePickerContent: {
+    width: '100%',
+    alignItems: 'center',
+    padding: 16,
+  },
+});
 
 export default ReminidersNotifications;

@@ -48,11 +48,11 @@ const PLAYGROUND_ITEMS: PlaygroundItem[] = [
     color: ['#4facfe', '#00f2fe'],
   },
   {
-    title: 'New Component',
-    icon: 'cube-outline',
-    route: 'NewComponent',
-    description: 'Description of the new component',
-    color: ['#fa709a', '#fee140'],
+    title: "New Component",
+    icon: "cube-outline",
+    route: "NewComponent",
+    description: "Description of the new component",
+    color: ["#fa709a", "#fee140"],
   },
 ];
 ```
