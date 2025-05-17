@@ -1,4 +1,5 @@
-// src/components/DynamicIslandNotification.tsx
+// Dynamic Island Notification Component for Mobile Apps
+// This component mimics the iOS Dynamic Island notification style
 import React, { useEffect } from 'react';
 import {
   Text,
@@ -19,41 +20,28 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 import { useStatusBarStore } from './store/useStatusBarStore';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
-// Valeurs de base pour le calcul des dimensions responsives
-const BASE_DYNAMIC_ISLAND_HEIGHT = 38;
-const BASE_DYNAMIC_ISLAND_MIN_WIDTH = 126;
-const BASE_DYNAMIC_ISLAND_MAX_WIDTH = 350;
-const BASE_DYNAMIC_ISLAND_EXPANDED_HEIGHT = 90;
-const ANIMATION_DURATION = 350;
-const SAFE_TOP = Platform.OS === 'ios' ? 10 : 5;
+// Base values for responsive dimension calculations
+const BASE_DYNAMIC_ISLAND_HEIGHT = 38; // Default island height
+const BASE_DYNAMIC_ISLAND_MIN_WIDTH = 126; // Minimum width when collapsed
+const BASE_DYNAMIC_ISLAND_MAX_WIDTH = 350; // Maximum width when expanded
+const BASE_DYNAMIC_ISLAND_EXPANDED_HEIGHT = 90; // Height when expanded
+const ANIMATION_DURATION = 350; // Duration of animations in ms
+const SAFE_TOP = Platform.OS === 'ios' ? 10 : 5; // Top padding based on platform
 
-const TIMING_CONFIG = {
-  duration: ANIMATION_DURATION,
-  easing: Easing.bezier(0.33, 1, 0.68, 1),
-};
-
-const SPRING_CONFIG = {
-  damping: 12,
-  stiffness: 100,
-  mass: 1,
-  overshootClamping: false,
-  restDisplacementThreshold: 0.01,
-  restSpeedThreshold: 2,
-};
-
+// Component Props Interface
 type Props = {
-  message: string;
-  onHide: () => void;
+  message: string; // Notification message to display
+  onHide: () => void; // Callback when notification is hidden
 };
 
 export default function DynamicIslandNotification({ message, onHide }: Props) {
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
-  const expansion = useSharedValue(0);
-  const textOpacity = useSharedValue(0);
-  const hidden = useStatusBarStore((s) => s.hidden);
+  const expansion = useSharedValue(0); // Controls expansion animation (0-1)
+  const textOpacity = useSharedValue(0); // Controls text fade animation (0-1)
 
-  // Calcul des dimensions responsives basées sur la taille de l'écran
+  // Calculate responsive dimensions based on screen size
   const dynamicIslandMinWidth = Math.min(BASE_DYNAMIC_ISLAND_MIN_WIDTH, windowWidth * 0.3);
   const dynamicIslandMaxWidth = Math.min(BASE_DYNAMIC_ISLAND_MAX_WIDTH, windowWidth * 0.9);
   const dynamicIslandHeight = Math.min(BASE_DYNAMIC_ISLAND_HEIGHT, windowHeight * 0.05);
@@ -62,68 +50,115 @@ export default function DynamicIslandNotification({ message, onHide }: Props) {
     windowHeight * 0.12
   );
 
+  // Function to hide the notification with animation
   const hideNotification = () => {
+    // First fade out the text
     textOpacity.value = withTiming(0, { duration: ANIMATION_DURATION / 2 });
 
     setTimeout(() => {
+      // Then collapse the island with bouncy spring animation
       expansion.value = withSpring(0, {
-        ...SPRING_CONFIG,
-        damping: 15,
-        stiffness: 120,
+        damping: 8, // Lower damping for more bounce
+        stiffness: 150, // Higher stiffness for faster animation
+        mass: 0.8, // Lower mass for more responsiveness
+        velocity: 3, // Initial velocity for more dynamic feel
+        overshootClamping: false, // Allow overshooting for bounce effect
+        restDisplacementThreshold: 0.01,
+        restSpeedThreshold: 2,
       });
       setTimeout(() => {
+        // Finally call the onHide callback
         runOnJS(onHide)();
       }, ANIMATION_DURATION);
     }, ANIMATION_DURATION / 2);
   };
 
+  // Initialize and set up animations on component mount
   useEffect(() => {
+    // Reset animation values
     expansion.value = 0;
     textOpacity.value = 0;
 
-    expansion.value = withSpring(1, SPRING_CONFIG);
+    // Start island expansion animation with bounce effect
+    expansion.value = withSpring(1, {
+      damping: 10, // Moderate damping for natural bounce
+      stiffness: 100, // Moderate stiffness
+      velocity: 3, // Initial velocity for quick start
+      mass: 0.7, // Lighter mass for quicker movement
+      overshootClamping: false, // Allow overshooting for bounce effect
+      restDisplacementThreshold: 0.01,
+      restSpeedThreshold: 2,
+    });
+
+    // Fade in text after island expansion starts
     setTimeout(() => {
       textOpacity.value = withTiming(1, { duration: ANIMATION_DURATION / 2 });
     }, ANIMATION_DURATION / 2);
 
+    // Auto-hide the notification after 3 seconds
     const timeout = setTimeout(() => {
       hideNotification();
     }, 3000);
 
+    // Clean up on unmount
     return () => clearTimeout(timeout);
   }, []);
 
+  // Animated styles for the dynamic island container
   const dynamicIslandStyle = useAnimatedStyle(() => {
+    // Interpolate width from min to max based on expansion value
     const width = interpolate(
       expansion.value,
       [0, 1],
       [dynamicIslandMinWidth, dynamicIslandMaxWidth]
     );
+
+    // Interpolate height from collapsed to expanded
     const height = interpolate(
       expansion.value,
       [0, 1],
       [dynamicIslandHeight, dynamicIslandExpandedHeight]
     );
+
+    // Interpolate border radius for smooth corner transition
     const borderRadius = interpolate(expansion.value, [0, 1], [20, 37]);
+
+    // Scale effect for more natural expanding/collapsing animation
+    const scale = interpolate(expansion.value, [0, 0.3, 1], [0.85, 0.95, 1], 'clamp');
 
     return {
       width,
       height,
       borderRadius,
+      transform: [{ scale }], // Apply scale transform
     };
   });
 
+  // Animated styles for the notification content (text)
   const contentStyle = useAnimatedStyle(() => ({
-    opacity: textOpacity.value,
-    transform: [{ translateY: interpolate(textOpacity.value, [0, 1], [10, 0]) }],
+    opacity: textOpacity.value, // Fade in/out text
+    transform: [{ translateY: interpolate(textOpacity.value, [0, 1], [10, 0]) }], // Slide up animation
   }));
 
   return (
     <>
+      {/* Set Status Bar to translucent and hidden */}
       <StatusBar translucent backgroundColor="transparent" hidden={true} barStyle="light-content" />
+
+      {/* Main container positioned at the top of the screen */}
       <View style={styles.dynamicIslandContainer}>
+        {/* Pressable wrapper to handle tap to dismiss */}
         <Pressable style={styles.pressableContainer} onPress={hideNotification}>
-          <Animated.View style={[styles.dynamicIsland, dynamicIslandStyle]}>
+          {/* Animated Dynamic Island */}
+          <Animated.View
+            style={[
+              styles.dynamicIsland,
+              dynamicIslandStyle,
+              {
+                transform: [{ translateY: -2 }], // Offset to prevent overflow at the top
+              },
+            ]}>
+            {/* Content container with notification message */}
             <Animated.View style={[styles.notificationContent, contentStyle]}>
               <Text style={styles.notificationText}>{message}</Text>
             </Animated.View>
@@ -134,7 +169,9 @@ export default function DynamicIslandNotification({ message, onHide }: Props) {
   );
 }
 
+// Component styles
 const styles = StyleSheet.create({
+  // Container for the entire dynamic island
   dynamicIslandContainer: {
     position: 'absolute',
     top: 0,
@@ -144,21 +181,20 @@ const styles = StyleSheet.create({
     elevation: 10000,
     alignItems: 'center',
     paddingTop: SAFE_TOP,
+    overflow: 'hidden', // Prevent content from overflowing during animation
   },
+  // Pressable wrapper for touch interactions
   pressableContainer: {
     alignItems: 'center',
   },
+  // The dynamic island itself
   dynamicIsland: {
     backgroundColor: '#000',
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 10,
   },
+  // Container for notification content
   notificationContent: {
     width: '100%',
     height: '100%',
@@ -166,6 +202,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
+  // Text styling for notification message
   notificationText: {
     color: '#FFF',
     fontSize: 16,
