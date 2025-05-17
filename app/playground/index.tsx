@@ -41,11 +41,11 @@ const PLAYGROUND_ITEMS: PlaygroundItem[] = [
     color: ['#fa709a', '#fee140'],
   },
   {
-    title: 'Dynamic Island Reload',
-    icon: 'reload-circle-outline',
+    title: 'Dynamic Island Notification',
+    icon: 'expand-outline',
     route: 'DynamicNotifications',
-    description: 'Dynamic Island reload with animated options',
-    color: ['#fa709a', '#fee140'],
+    description: 'Dynamic Island notification animated options',
+    color: ['#da22ff', '#9733ee'],
   },
 ];
 
