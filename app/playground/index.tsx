@@ -7,6 +7,8 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
+import { useStatusBarStore } from '@/components/playground/DynamicNotifications/store/useStatusBarStore';
+import { DynamicIslandProvider } from '@/components/playground/DynamicNotifications/context';
 
 type PlaygroundItem = {
   title: string;
@@ -38,6 +40,13 @@ const PLAYGROUND_ITEMS: PlaygroundItem[] = [
     description: 'Header menu with animated options',
     color: ['#fa709a', '#fee140'],
   },
+  {
+    title: 'Dynamic Island Reload',
+    icon: 'reload-circle-outline',
+    route: 'DynamicNotifications',
+    description: 'Dynamic Island reload with animated options',
+    color: ['#fa709a', '#fee140'],
+  },
 ];
 
 export default function PlaygroundIndex() {
@@ -48,87 +57,89 @@ export default function PlaygroundIndex() {
 
   // Animation values for cards
   const scrollY = React.useRef(new Animated.Value(0)).current;
-
+  const { hidden } = useStatusBarStore.getState();
   const navigateTo = (route: string) => {
     router.push(`/playground/${route}` as any);
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor }}>
-      <StatusBar style="auto" />
-      <ThemedView style={styles.container}>
-        <View style={styles.headerContainer}>
-          <ThemedText style={styles.header}>Playground</ThemedText>
-          <ThemedText style={styles.subheader}>Interactive components</ThemedText>
-        </View>
+      <DynamicIslandProvider>
+        <StatusBar style="auto" hidden={hidden} />
+        <ThemedView style={styles.container}>
+          <View style={styles.headerContainer}>
+            <ThemedText style={styles.header}>Playground</ThemedText>
+            <ThemedText style={styles.subheader}>Interactive components</ThemedText>
+          </View>
 
-        <Animated.ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
-            useNativeDriver: true,
-          })}
-          scrollEventThrottle={16}>
-          {PLAYGROUND_ITEMS.map((item, index) => {
-            // Animation based on a standard offset to avoid circular references
-            const itemOffset = 100 * index;
-            const nextItemOffset = 100 * (index + 2);
+          <Animated.ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+            onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+              useNativeDriver: true,
+            })}
+            scrollEventThrottle={16}>
+            {PLAYGROUND_ITEMS.map((item, index) => {
+              // Animation based on a standard offset to avoid circular references
+              const itemOffset = 100 * index;
+              const nextItemOffset = 100 * (index + 2);
 
-            const inputRange = [-1, 0, itemOffset, nextItemOffset];
+              const inputRange = [-1, 0, itemOffset, nextItemOffset];
 
-            const scale = scrollY.interpolate({
-              inputRange,
-              outputRange: [1, 1, 1, 0.9],
-              extrapolate: 'clamp',
-            });
+              const scale = scrollY.interpolate({
+                inputRange,
+                outputRange: [1, 1, 1, 0.9],
+                extrapolate: 'clamp',
+              });
 
-            const opacity = scrollY.interpolate({
-              inputRange,
-              outputRange: [1, 1, 1, 0.5],
-              extrapolate: 'clamp',
-            });
+              const opacity = scrollY.interpolate({
+                inputRange,
+                outputRange: [1, 1, 1, 0.5],
+                extrapolate: 'clamp',
+              });
 
-            return (
-              <Animated.View
-                key={index}
-                style={{
-                  transform: [{ scale }],
-                  opacity,
-                }}>
-                <Pressable
-                  onPress={() => navigateTo(item.route)}
-                  style={({ pressed }) => [
-                    styles.cardWrapper,
-                    {
-                      opacity: pressed ? 0.8 : 1,
-                      transform: [{ scale: pressed ? 0.98 : 1 }],
-                    },
-                  ]}>
-                  <LinearGradient
-                    colors={item.color}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={styles.card}>
-                    <View style={styles.cardContent}>
-                      <View style={styles.cardIcon}>
-                        <Ionicons name={item.icon as any} size={32} color="#ffffff" />
+              return (
+                <Animated.View
+                  key={index}
+                  style={{
+                    transform: [{ scale }],
+                    opacity,
+                  }}>
+                  <Pressable
+                    onPress={() => navigateTo(item.route)}
+                    style={({ pressed }) => [
+                      styles.cardWrapper,
+                      {
+                        opacity: pressed ? 0.8 : 1,
+                        transform: [{ scale: pressed ? 0.98 : 1 }],
+                      },
+                    ]}>
+                    <LinearGradient
+                      colors={item.color}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={styles.card}>
+                      <View style={styles.cardContent}>
+                        <View style={styles.cardIcon}>
+                          <Ionicons name={item.icon as any} size={32} color="#ffffff" />
+                        </View>
+                        <View style={styles.cardText}>
+                          <ThemedText style={styles.title}>{item.title}</ThemedText>
+                          <ThemedText style={styles.description}>{item.description}</ThemedText>
+                        </View>
+                        <View style={styles.arrowContainer}>
+                          <Ionicons name="chevron-forward" size={20} color="#ffffff" />
+                        </View>
                       </View>
-                      <View style={styles.cardText}>
-                        <ThemedText style={styles.title}>{item.title}</ThemedText>
-                        <ThemedText style={styles.description}>{item.description}</ThemedText>
-                      </View>
-                      <View style={styles.arrowContainer}>
-                        <Ionicons name="chevron-forward" size={20} color="#ffffff" />
-                      </View>
-                    </View>
-                  </LinearGradient>
-                </Pressable>
-              </Animated.View>
-            );
-          })}
-        </Animated.ScrollView>
-      </ThemedView>
+                    </LinearGradient>
+                  </Pressable>
+                </Animated.View>
+              );
+            })}
+          </Animated.ScrollView>
+        </ThemedView>
+      </DynamicIslandProvider>
     </SafeAreaView>
   );
 }
