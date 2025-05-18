@@ -47,6 +47,13 @@ const PLAYGROUND_ITEMS: PlaygroundItem[] = [
     description: 'Dynamic Island reload with animated options',
     color: ['#fa709a', '#fee140'],
   },
+  {
+    title: 'Status Island',
+    icon: 'checkmark-circle-outline',
+    route: 'StatusIsland',
+    description: 'Status island with animated options',
+    color: ['#fa709a', '#fee140'],
+  },
 ];
 
 export default function PlaygroundIndex() {

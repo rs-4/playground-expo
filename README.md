@@ -15,6 +15,7 @@ Currently, the playground contains the following components:
 2. **[Reminders Notifications](./components/playground/ReminidersNotifications)** ⏰ - Time-based reminder selection component with animated UI
 3. **[Header Menu](./components/playground/HeaderMenu)** 📋 - Header menu with animated options
 4. **[Dynamic Island Notifications](./components/playground/DynamicNotifications)** 💬 - iOS-style Dynamic Island notification system with spring animations
+5. **[Status Island](./components/playground/StatusIsland)** ✅ - Success/error notification system that expands downward with appropriate icons
 
 Each component is accessible through the playground's home page and has a dedicated demonstration page.
 
