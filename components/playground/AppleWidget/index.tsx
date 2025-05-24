@@ -91,11 +91,16 @@ export function AppleWidget({ items }: AppleWidgetProps) {
     const currentScrollIndex = Math.round(scrollY.value / CARD_HEIGHT);
     const currentRealIndex = currentScrollIndex % items.length;
     
+    let scrollIndex = currentScrollIndex;
+    
     if (targetIndex !== currentRealIndex) {
+      // Find the closest path to target
       const diff = targetIndex - currentRealIndex;
-      const scrollIndex = Math.abs(diff) <= items.length / 2 
-        ? currentScrollIndex + diff
-        : currentScrollIndex + (diff > 0 ? diff - items.length : diff + items.length);
+      if (Math.abs(diff) <= items.length / 2) {
+        scrollIndex = currentScrollIndex + diff;
+      } else {
+        scrollIndex = currentScrollIndex + (diff > 0 ? diff - items.length : diff + items.length);
+      }
       
       scrollViewRef.current?.scrollTo({
         y: scrollIndex * CARD_HEIGHT,
