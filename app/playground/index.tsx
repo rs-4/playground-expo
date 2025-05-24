@@ -20,6 +20,13 @@ type PlaygroundItem = {
 
 const PLAYGROUND_ITEMS: PlaygroundItem[] = [
   {
+    title: 'Apple Widget',
+    icon: 'albums-outline',
+    route: 'AppleWidget',
+    description: 'Carousel rectangulaire avec effet parallax',
+    color: ['#667eea', '#764ba2'],
+  },
+  {
     title: 'Plus Menu',
     icon: 'add-circle-outline',
     route: 'PlusMenu',

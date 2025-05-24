@@ -19,8 +19,6 @@ import Animated, {
   interpolate,
   runOnJS,
 } from 'react-native-reanimated';
-import { useStatusBarStore } from './store/useStatusBarStore';
-import { useColorScheme } from '@/hooks/useColorScheme';
 
 // Base values for responsive dimension calculations
 const BASE_DYNAMIC_ISLAND_HEIGHT = 38; // Default island height
@@ -189,7 +187,7 @@ const styles = StyleSheet.create({
   },
   // The dynamic island itself
   dynamicIsland: {
-    backgroundColor: '#000',
+    backgroundColor: '#00',
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
