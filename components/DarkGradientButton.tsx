@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, GestureResponderEvent, Animated, Pressable } from 'react-native';
+import { View, Text, GestureResponderEvent, Animated, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 
@@ -48,67 +48,35 @@ const DarkGradientButton = ({ title = 'Get started', onPress }: DarkGradientButt
         onPress={onPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
-        style={styles.pressable}>
+        className="rounded-[15px] overflow-hidden pt-8">
         <LinearGradient
           colors={['#34c759', '#2ecc71']}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
-          style={styles.button}>
-          <View style={styles.innerShadow} />
+          className="rounded-[15px] py-3.5 px-6 overflow-hidden relative"
+          style={{
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.2,
+            shadowRadius: 3,
+            elevation: 3,
+          }}>
+          <View
+            className="absolute left-0 right-0 bottom-0 rounded-[15px] z-0"
+            style={{
+              top: 1.85,
+              backgroundColor: 'rgba(0, 0, 0, 0.1)',
+            }}
+          />
 
-          <View style={styles.content}>
-            <Text style={styles.text}>{title}</Text>
-            <Feather name="arrow-right" size={16} color="#FFFFFF" style={styles.icon} />
+          <View className="flex-row items-center justify-center z-10">
+            <Text className="text-white font-semibold text-base mr-2">{title}</Text>
+            <Feather name="arrow-right" size={16} color="#FFFFFF" className="mt-0.5" />
           </View>
         </LinearGradient>
       </Pressable>
     </Animated.View>
   );
 };
-
-const styles = StyleSheet.create({
-  pressable: {
-    borderRadius: 15,
-    overflow: 'hidden',
-    paddingTop: 32,
-  },
-  button: {
-    borderRadius: 15,
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    overflow: 'hidden',
-    position: 'relative',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  innerShadow: {
-    position: 'absolute',
-    top: 1.85,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    borderRadius: 15,
-    zIndex: 0,
-  },
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 1,
-  },
-  text: {
-    color: '#FFFFFF',
-    fontWeight: '600',
-    fontSize: 16,
-    marginRight: 8,
-  },
-  icon: {
-    marginTop: 1,
-  },
-});
 
 export default DarkGradientButton;

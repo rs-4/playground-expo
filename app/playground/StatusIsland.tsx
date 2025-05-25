@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
+import { TouchableOpacity, View, Text } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {
@@ -14,23 +13,25 @@ function StatusIslandDemo() {
   const buttonBgError = '#FF3B30';
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>Status Island Demo</ThemedText>
-      <ThemedText style={styles.description}>
+    <ThemedView className="flex-1 p-5 items-center justify-center">
+      <Text className="text-2xl font-bold mb-4 dark:text-white">Status Island Demo</Text>
+      <Text className="text-base text-center mb-10 px-5 dark:text-white">
         This component shows status notifications that expand downward from the top of the screen
-      </ThemedText>
+      </Text>
 
-      <View style={styles.buttonContainer}>
+      <View className="w-full flex-row justify-around mb-5">
         <TouchableOpacity
-          style={[styles.button, { backgroundColor: buttonBgSuccess }]}
+          className="py-3 px-5 rounded-[10px] min-w-[150px] items-center"
+          style={{ backgroundColor: buttonBgSuccess }}
           onPress={() => success('Success ! ')}>
-          <ThemedText style={styles.buttonText}>Show Success</ThemedText>
+          <Text className="text-black font-semibold">Show Success</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.button, { backgroundColor: buttonBgError }]}
+          className="py-3 px-5 rounded-[10px] min-w-[150px] items-center"
+          style={{ backgroundColor: buttonBgError }}
           onPress={() => error('Something wrong!')}>
-          <ThemedText style={styles.buttonText}>Show Error</ThemedText>
+          <Text className="text-white font-semibold">Show Error</Text>
         </TouchableOpacity>
       </View>
     </ThemedView>
@@ -44,40 +45,3 @@ export default function StatusIslandScreen() {
     </StatusIslandProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  description: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 40,
-    paddingHorizontal: 20,
-  },
-  buttonContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-  },
-  button: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    minWidth: 150,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: '600',
-  },
-});

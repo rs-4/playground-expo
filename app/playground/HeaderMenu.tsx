@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, SafeAreaView, TouchableOpacity, Animated, Easing } from 'react-native';
+import { Animated, Easing } from 'react-native';
 import HeaderMenu from '@/components/playground/HeaderMenu';
 import { ThemedView } from '@/components/ThemedView';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { Ionicons } from '@expo/vector-icons';
-import { useColorScheme } from '@/hooks/useColorScheme';
+
 import { menuItems } from '@/constants/MenuItem';
 
 export default function HeaderMenuScreen() {
@@ -49,7 +47,7 @@ export default function HeaderMenuScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView className="flex-1">
       <HeaderMenu
         greeting="Hello"
         userName="John"
@@ -59,13 +57,3 @@ export default function HeaderMenuScreen() {
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  headerAction: {
-    padding: 8,
-    borderRadius: 20,
-  },
-});

@@ -11,29 +11,12 @@ export default function DynamicIslandReloadScreen() {
   const { showNotification } = useDynamicIsland();
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView className="flex-1 justify-center items-center">
       <TouchableOpacity
-        style={styles.button}
+        className="bg-[#0F0F0F] p-4 px-10 rounded-2xl"
         onPress={() => showNotification('⭐ Hello X, how are you today ?')}>
-        <ThemedText style={styles.text}>Click me !</ThemedText>
+        <ThemedText className="text-white">Click me !</ThemedText>
       </TouchableOpacity>
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  button: {
-    backgroundColor: '#0F0F0F',
-    padding: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-  },
-  text: {
-    color: 'white',
-  },
-});

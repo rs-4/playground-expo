@@ -1,7 +1,7 @@
 // Status Island Component for Mobile Apps
 // This component extends downward to show success or error status
 import React, { useEffect } from 'react';
-import { Text, View, StyleSheet, useWindowDimensions, Platform, Pressable } from 'react-native';
+import { Text, View, useWindowDimensions, Platform, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -216,29 +216,36 @@ export default function StatusIsland({ statusType, message, onHide }: Props) {
   });
 
   return (
-    <View style={styles.statusIslandContainer}>
-      <Pressable style={styles.pressableContainer} onPress={hideNotification}>
+    <View
+      className="absolute top-0 left-0 right-0 z-[10000] items-center overflow-hidden"
+      style={{ paddingTop: SAFE_TOP, elevation: 10000 }}>
+      <Pressable className="items-center" onPress={hideNotification}>
         <Animated.View
+          className="bg-black overflow-hidden items-center flex-col justify-between pb-4"
           style={[
-            styles.statusIsland,
             statusIslandStyle,
             {
               shadowColor: shadowColor,
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 6,
+              elevation: 8,
             },
           ]}>
-          {/* Je restructure complètement le contenu pour un meilleur positionnement */}
-          <View style={styles.safeAreaTop} />
+          {/* Zone de sécurité pour éviter la vraie Dynamic Island */}
+          <View style={{ height: ICON_SAFE_TOP }} />
 
-          <View style={styles.centeredContent}>
+          <View className="flex-1 justify-center items-center">
             <Animated.View
-              style={[styles.iconContainer, iconStyle, { borderColor: iconConfig.borderColor }]}>
+              className="w-[55px] h-[55px] rounded-[27.5px] items-center justify-center border-2"
+              style={[iconStyle, { borderColor: iconConfig.borderColor }]}>
               <Ionicons name={iconConfig.name as any} size={38} color={iconConfig.color} />
             </Animated.View>
           </View>
 
           {truncatedMessage && (
-            <Animated.View style={[styles.textContainer, contentStyle]}>
-              <Animated.Text style={[styles.messageText, textStyle]}>
+            <Animated.View className="w-full px-3 pb-1" style={contentStyle}>
+              <Animated.Text className="text-sm font-semibold text-center" style={textStyle}>
                 {truncatedMessage}
               </Animated.Text>
             </Animated.View>
@@ -248,59 +255,3 @@ export default function StatusIsland({ statusType, message, onHide }: Props) {
     </View>
   );
 }
-
-// Component styles
-const styles = StyleSheet.create({
-  statusIslandContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 10000,
-    elevation: 10000,
-    alignItems: 'center',
-    paddingTop: SAFE_TOP,
-    overflow: 'hidden',
-  },
-  pressableContainer: {
-    alignItems: 'center',
-  },
-  statusIsland: {
-    backgroundColor: '#000',
-    overflow: 'hidden',
-    alignItems: 'center',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 8,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    paddingBottom: 15,
-  },
-  safeAreaTop: {
-    height: ICON_SAFE_TOP, // Zone de sécurité pour éviter la vraie Dynamic Island
-  },
-  centeredContent: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  iconContainer: {
-    width: 55,
-    height: 55,
-    borderRadius: 27.5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-  },
-  textContainer: {
-    width: '100%',
-    paddingHorizontal: 12,
-    paddingBottom: 5,
-  },
-  messageText: {
-    fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-});

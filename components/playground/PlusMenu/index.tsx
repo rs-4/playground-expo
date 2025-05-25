@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Pressable, Platform } from 'react-native';
+import { View, Pressable, Platform } from 'react-native';
 import Constants from 'expo-constants';
 import { BlurView } from 'expo-blur';
 import Reanimated, {
@@ -162,39 +162,72 @@ const PlusMenu: React.FC = () => {
    * Render
    * ------------------------------------------------*/
   return (
-    <View style={styles.container} pointerEvents="box-none">
+    <View className="flex-1" pointerEvents="box-none">
       {(showOptions || isClosing) && (
-        <Reanimated.View style={[styles.blurOverlay, blurStyle]} pointerEvents="auto">
-          <Pressable style={StyleSheet.absoluteFill} onPress={toggle}>
+        <Reanimated.View
+          className="absolute inset-0"
+          style={[blurStyle, { zIndex: 20 }]}
+          pointerEvents="auto">
+          <Pressable className="absolute inset-0" onPress={toggle}>
             {Platform.OS === 'ios' ? (
-              <BlurView style={StyleSheet.absoluteFill} intensity={blurAmount} tint="dark" />
+              <BlurView className="absolute inset-0" intensity={blurAmount} tint="dark" />
             ) : (
-              <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.1)' }]} />
+              <View className="absolute inset-0 bg-black bg-opacity-10" />
             )}
           </Pressable>
         </Reanimated.View>
       )}
 
-      {/* Fixed top blur */}
-      <View style={styles.topBlur} pointerEvents="none">
-        {Platform.OS === 'ios' ? (
-          <BlurView
-            style={StyleSheet.absoluteFill}
-            intensity={30}
-            tint={colorScheme === 'dark' ? 'dark' : 'light'}
-          />
-        ) : (
-          <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(255,255,255,0.8)' }]} />
-        )}
-      </View>
-
       {/* Floating action button & options */}
-      <View style={styles.bottomBar} pointerEvents="box-none">
+      <View
+        className="absolute left-0 right-0 items-end"
+        style={{ bottom: 40, paddingRight: 20, zIndex: 25 }}
+        pointerEvents="box-none">
         {/* Main + button */}
-        <PlusButtonReanimated style={[styles.plusBtn, plusStyle]}>
-          <Pressable style={StyleSheet.absoluteFill} onPress={toggle}>
-            <PlusBarReanimated style={[styles.plusBar, hBarStyle]} />
-            <PlusBarReanimated style={[styles.plusBar, vBarStyle]} />
+        <PlusButtonReanimated
+          className="rounded-2xl justify-center items-center shadow-lg"
+          style={[
+            plusStyle,
+            {
+              width: 60,
+              height: 60,
+              marginBottom: 8,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.15,
+              shadowRadius: 8,
+              elevation: 5,
+            },
+          ]}>
+          <Pressable className="absolute inset-0" onPress={toggle}>
+            <PlusBarReanimated
+              className="absolute rounded-sm"
+              style={[
+                hBarStyle,
+                {
+                  width: 18,
+                  height: 2,
+                  top: '50%',
+                  left: '50%',
+                  marginLeft: -9,
+                  marginTop: -1,
+                },
+              ]}
+            />
+            <PlusBarReanimated
+              className="absolute rounded-sm"
+              style={[
+                vBarStyle,
+                {
+                  width: 18,
+                  height: 2,
+                  top: '50%',
+                  left: '50%',
+                  marginLeft: -9,
+                  marginTop: -1,
+                },
+              ]}
+            />
           </Pressable>
         </PlusButtonReanimated>
 
@@ -237,54 +270,3 @@ const PlusMenu: React.FC = () => {
 };
 
 export default PlusMenu;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  blurOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 20,
-  },
-  topBlur: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: STATUSBAR_HEIGHT + 80,
-    zIndex: 15,
-    overflow: 'hidden',
-  },
-  bottomBar: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 40,
-    alignItems: 'flex-end',
-    paddingRight: 20,
-    zIndex: 25,
-  },
-  plusBtn: {
-    width: 60,
-    height: 60,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
-    marginBottom: 8,
-  },
-  plusBar: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    width: 18,
-    height: 2,
-    borderRadius: 1,
-    marginLeft: -9, // centers horizontally
-    marginTop: -1, // centers vertically
-  },
-});

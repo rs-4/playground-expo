@@ -1,11 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  View,
-  Dimensions,
-  StyleSheet,
-  TouchableOpacity,
-  ImageBackground,
-} from 'react-native';
+import { View, Dimensions, TouchableOpacity, ImageBackground, Text } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -15,7 +9,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { BlurView } from 'expo-blur';
 import { ThemedView } from '@/components/ThemedView';
-import { ThemedText } from '@/components/ThemedText';
 
 const { width: screenWidth } = Dimensions.get('window');
 const CARD_HEIGHT = 200;
@@ -32,7 +25,7 @@ interface AppleWidgetProps {
   items: AppleWidgetItem[];
 }
 
-export function AppleWidget({ items }: AppleWidgetProps) {
+export default function AppleWidget({ items }: AppleWidgetProps) {
   const scrollViewRef = useRef<Animated.ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollY = useSharedValue(0);
@@ -64,7 +57,7 @@ export function AppleWidget({ items }: AppleWidgetProps) {
   const onMomentumScrollEnd = (event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const index = Math.round(offsetY / CARD_HEIGHT);
-    
+
     // Reset position for infinite scroll
     if (index <= 0) {
       setTimeout(() => {
@@ -90,9 +83,9 @@ export function AppleWidget({ items }: AppleWidgetProps) {
   const scrollToIndex = (targetIndex: number) => {
     const currentScrollIndex = Math.round(scrollY.value / CARD_HEIGHT);
     const currentRealIndex = currentScrollIndex % items.length;
-    
+
     let scrollIndex = currentScrollIndex;
-    
+
     if (targetIndex !== currentRealIndex) {
       // Find the closest path to target
       const diff = targetIndex - currentRealIndex;
@@ -101,7 +94,7 @@ export function AppleWidget({ items }: AppleWidgetProps) {
       } else {
         scrollIndex = currentScrollIndex + (diff > 0 ? diff - items.length : diff + items.length);
       }
-      
+
       scrollViewRef.current?.scrollTo({
         y: scrollIndex * CARD_HEIGHT,
         animated: true,
@@ -118,9 +111,11 @@ export function AppleWidget({ items }: AppleWidgetProps) {
       ];
 
       return {
-        transform: [{ 
-          scale: interpolate(scrollY.value, inputRange, [0.8, 1, 0.8], 'clamp') 
-        }],
+        transform: [
+          {
+            scale: interpolate(scrollY.value, inputRange, [0.8, 1, 0.8], 'clamp'),
+          },
+        ],
         opacity: interpolate(scrollY.value, inputRange, [0, 1, 0], 'clamp'),
       };
     });
@@ -133,31 +128,39 @@ export function AppleWidget({ items }: AppleWidgetProps) {
       ];
 
       return {
-        transform: [{ 
-          translateY: interpolate(scrollY.value, inputRange, [-15, 0, 15], 'clamp') 
-        }],
+        transform: [
+          {
+            translateY: interpolate(scrollY.value, inputRange, [-15, 0, 15], 'clamp'),
+          },
+        ],
       };
     });
 
     return (
-      <Animated.View key={`${item.id}-${index}`} style={[styles.card, animatedStyle]}>
-        <View style={styles.cardContainer}>
-          <Animated.View style={[styles.backgroundContainer, backgroundAnimatedStyle]}>
+      <Animated.View
+        key={`${item.id}-${index}`}
+        className="h-[200px] w-full justify-center items-center  "
+        style={animatedStyle}>
+        <View className="flex-1 w-full rounded-[20px] overflow-hidden shadow-2xl border-[0.5px] border-white/10">
+          <Animated.View className="absolute inset-0" style={backgroundAnimatedStyle}>
             <ImageBackground
               source={{ uri: item.background }}
-              style={styles.backgroundImage}
-              imageStyle={styles.backgroundImageStyle}
-            >
-              <View style={styles.gradient} />
+              className="flex-1 w-full h-full"
+              imageStyle={{ borderRadius: 20 }}>
+              <View className="absolute inset-0 bg-black/20 rounded-[20px]" />
             </ImageBackground>
           </Animated.View>
-          
-          <View style={styles.cardContent}>
+
+          <View className="flex-1 p-6 justify-end z-10">
             {item.content || (
               <>
-                <ThemedText style={styles.cardTitle}>{item.title}</ThemedText>
+                <Text className="text-2xl font-bold text-white mb-1.5 drop-shadow-lg">
+                  {item.title}
+                </Text>
                 {item.subtitle && (
-                  <ThemedText style={styles.cardSubtitle}>{item.subtitle}</ThemedText>
+                  <Text className="text-base text-white/90 font-medium drop-shadow-md">
+                    {item.subtitle}
+                  </Text>
                 )}
               </>
             )}
@@ -168,33 +171,32 @@ export function AppleWidget({ items }: AppleWidgetProps) {
   };
 
   const renderDots = () => (
-    <View style={styles.dotsContainer}>
+    <View className="flex-col items-center justify-center w-2 gap-1">
       {items.map((_, index) => {
         const animatedDotStyle = useAnimatedStyle(() => {
           // Calculate current index based on scroll position
           const currentScrollIndex = scrollY.value / CARD_HEIGHT;
-          const currentRealIndex = (currentScrollIndex % items.length + items.length) % items.length;
-          
+          const currentRealIndex =
+            ((currentScrollIndex % items.length) + items.length) % items.length;
+
           // Distance from current position
           const distance = Math.abs(index - currentRealIndex);
           const adjustedDistance = Math.min(distance, items.length - distance);
-          
+
           return {
-            transform: [{ 
-              scale: interpolate(adjustedDistance, [0, 1], [1.4, 0.8], 'clamp') 
-            }],
+            transform: [
+              {
+                scale: interpolate(adjustedDistance, [0, 1], [1.4, 0.8], 'clamp'),
+              },
+            ],
             opacity: interpolate(adjustedDistance, [0, 1], [1, 0.4], 'clamp'),
             backgroundColor: '#ffffff',
           };
         });
-        
+
         return (
-          <TouchableOpacity
-            key={index}
-            onPress={() => scrollToIndex(index)}
-            style={styles.dotTouchable}
-          >
-            <Animated.View style={[styles.dot, animatedDotStyle]} />
+          <TouchableOpacity key={index} onPress={() => scrollToIndex(index)} className="p-1.5">
+            <Animated.View className="w-2 h-2 rounded-full" style={animatedDotStyle} />
           </TouchableOpacity>
         );
       })}
@@ -202,162 +204,34 @@ export function AppleWidget({ items }: AppleWidgetProps) {
   );
 
   return (
-    <ThemedView style={styles.container}>
-      <View style={styles.carouselContainer}>
-        <View style={styles.scrollContainer}>
+    <ThemedView className="h-[200px]">
+      <View className="flex-row flex-1 bg-[#121212]">
+        <View className="flex-1 mr-4 rounded-[20px]  shadow-2xl border-t border-white/10 overflow-hidden">
           {/* Subtle blur effect at top */}
-          <BlurView 
+          <BlurView
             intensity={5}
-            style={styles.blurOverlay}
+            className="absolute top-0 left-0 right-0 h-5 rounded-t-[20px] z-10 opacity-70"
             tint="dark"
           />
-          
+
           <Animated.ScrollView
             ref={scrollViewRef}
+            className="bg-stone-900"
             showsVerticalScrollIndicator={false}
             pagingEnabled={true}
             decelerationRate="fast"
             snapToInterval={CARD_HEIGHT}
             snapToAlignment="center"
-            contentContainerStyle={styles.scrollViewContent}
+            contentContainerStyle={{ flexGrow: 1, alignItems: 'stretch', justifyContent: 'center' }}
             onScroll={scrollHandler}
             onMomentumScrollEnd={onMomentumScrollEnd}
-            scrollEventThrottle={16}
-          >
+            scrollEventThrottle={16}>
             {infiniteItems.map((item, index) => renderItem(item, index))}
           </Animated.ScrollView>
         </View>
-        
+
         {renderDots()}
       </View>
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    height: CARD_HEIGHT,
-    backgroundColor: '#121212',
-  },
-  carouselContainer: {
-    flexDirection: 'row',
-    flex: 1,
-  },
-  scrollContainer: {
-    flex: 1,
-    marginRight: 16,
-    borderRadius: 20,
-    backgroundColor: '#1f1f1f',
-    shadowColor: '#333333',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 15,
-    elevation: 20,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.1)',
-    overflow: 'hidden',
-  },
-  scrollViewContent: {
-    flexGrow: 1,
-    alignItems: 'stretch',
-    justifyContent: 'center',
-  },
-  card: {
-    height: CARD_HEIGHT,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cardContainer: {
-    flex: 1,
-    width: '100%',
-    borderRadius: 20,
-    overflow: 'hidden',
-    backgroundColor: '#1a1a1a',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.4,
-    shadowRadius: 20,
-    elevation: 15,
-    borderWidth: 0.5,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  backgroundContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  backgroundImage: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-  },
-  backgroundImageStyle: {
-    borderRadius: 20,
-  },
-  gradient: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 20,
-  },
-  cardContent: {
-    flex: 1,
-    padding: 24,
-    justifyContent: 'flex-end',
-    zIndex: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-  },
-  cardTitle: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: '#fff',
-    marginBottom: 6,
-    textShadowColor: 'rgba(0, 0, 0, 0.8)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
-  },
-  cardSubtitle: {
-    fontSize: 16,
-    color: '#fff',
-    opacity: 0.9,
-    fontWeight: '500',
-    textShadowColor: 'rgba(0, 0, 0, 0.6)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
-  },
-  dotsContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 8,
-    gap: 4,
-  },
-  dotTouchable: {
-    padding: 6,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  blurOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    zIndex: 1,
-    opacity: 0.7,
-  },
-}); 

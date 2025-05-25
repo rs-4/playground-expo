@@ -7,6 +7,10 @@ export default function PlaygroundLayout() {
       <Stack.Screen name="index" />
       <Stack.Screen name="PlusMenu" />
       <Stack.Screen name="ReminidersNotifications" />
+      <Stack.Screen name="AppleWidget" />
+      <Stack.Screen name="StatusIsland" />
+      <Stack.Screen name="DynamicNotifications" />
+      <Stack.Screen name="HeaderMenu" />
     </Stack>
   );
 }

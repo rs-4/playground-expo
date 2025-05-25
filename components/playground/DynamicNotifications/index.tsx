@@ -1,15 +1,7 @@
 // Dynamic Island Notification Component for Mobile Apps
 // This component mimics the iOS Dynamic Island notification style
 import React, { useEffect } from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  useWindowDimensions,
-  StatusBar,
-  Platform,
-  Pressable,
-} from 'react-native';
+import { Text, View, useWindowDimensions, StatusBar, Platform, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -144,21 +136,25 @@ export default function DynamicIslandNotification({ message, onHide }: Props) {
       <StatusBar translucent backgroundColor="transparent" hidden={true} barStyle="light-content" />
 
       {/* Main container positioned at the top of the screen */}
-      <View style={styles.dynamicIslandContainer}>
+      <View
+        className="absolute top-0 left-0 right-0 z-[10000] items-center overflow-hidden"
+        style={{ paddingTop: SAFE_TOP, elevation: 10000 }}>
         {/* Pressable wrapper to handle tap to dismiss */}
-        <Pressable style={styles.pressableContainer} onPress={hideNotification}>
+        <Pressable className="items-center" onPress={hideNotification}>
           {/* Animated Dynamic Island */}
           <Animated.View
+            className="bg-black overflow-hidden items-center justify-center"
             style={[
-              styles.dynamicIsland,
               dynamicIslandStyle,
               {
                 transform: [{ translateY: -2 }], // Offset to prevent overflow at the top
               },
             ]}>
             {/* Content container with notification message */}
-            <Animated.View style={[styles.notificationContent, contentStyle]}>
-              <Text style={styles.notificationText}>{message}</Text>
+            <Animated.View
+              className="w-full h-full items-center justify-center px-5"
+              style={contentStyle}>
+              <Text className="text-white text-base font-semibold text-center">{message}</Text>
             </Animated.View>
           </Animated.View>
         </Pressable>
@@ -166,45 +162,3 @@ export default function DynamicIslandNotification({ message, onHide }: Props) {
     </>
   );
 }
-
-// Component styles
-const styles = StyleSheet.create({
-  // Container for the entire dynamic island
-  dynamicIslandContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 10000,
-    elevation: 10000,
-    alignItems: 'center',
-    paddingTop: SAFE_TOP,
-    overflow: 'hidden', // Prevent content from overflowing during animation
-  },
-  // Pressable wrapper for touch interactions
-  pressableContainer: {
-    alignItems: 'center',
-  },
-  // The dynamic island itself
-  dynamicIsland: {
-    backgroundColor: '#00',
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  // Container for notification content
-  notificationContent: {
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  // Text styling for notification message
-  notificationText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-});
